@@ -1,7 +1,8 @@
+console.log('le mover')
 var Mover = function(position) {
-    this.position = position || new paper.Point(paper.view.center);
-    this.velocity = new paper.Point(0, 0);
-    this.acceleration = new paper.Point(0, 0);
+    this.position = position || new Point(view.center);
+    this.velocity = new Point(0, 0);
+    this.acceleration = new Point(0, 0);
 
     this.MAXIMUM_SPEED = 4;
     this.SIZE = 16;
@@ -21,5 +22,5 @@ Mover.prototype.update = function() {
 
     this.position += this.velocity;
 
-    this.acceleration = new paper.Point(0, 0);
+    this.acceleration = new Point(0, 0);
 };
