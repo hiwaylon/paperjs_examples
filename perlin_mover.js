@@ -26,8 +26,8 @@ var Mover = function() {
     this.position = new Point(view.center);
     this.velocity = new Point(0, 0);
 
-    this.MAXIMUM_SPEED = 5;
-    this.SIZE = 32;
+    this.MAXIMUM_SPEED = 4;
+    this.SIZE = 16;
 };
 
 Mover.prototype.update = function(acceleration) {
@@ -48,15 +48,19 @@ var mover = new Mover();
 var circle = Path.Circle(mover.position, mover.SIZE)
 circle.fillColor = "orange";
 
-// Create a point-text item at {x: 30, y: 30}.
+// Create a point-text item at {x: 30, y: 30}:
 var text = new PointText(new Point(30, 30));
 text.fillColor = "black";
 
+var perlin = new SimplexNoise();
+
 var ACCELERATION_BOUND = 0.5;
 
+var tx = 0, ty = 10000;
+
 function onFrame(event) {
-    var accelerationDirection = new Point(randomInt(-1, 1), randomInt(-1, 1));
-    var acceleration = accelerationDirection * randomInt(0, ACCELERATION_BOUND);
+    var accelerationDirection = new Point(perlin.noise(tx, 0), perlin.noise(0, ty));
+    var acceleration = accelerationDirection.normalize(ACCELERATION_BOUND);
     mover.update(acceleration);
 
     // TODO: Demo specific stuff.
@@ -65,5 +69,7 @@ function onFrame(event) {
     circle.position = mover.position;
 
     // Set the content of the text item.
-    text.content = "x: " + circle.position.x + ", y: " + circle.position.y + "\nv: " + mover.velocity + "\na: " + acceleration;
+    text.content = "p: " + circle.position + "\nv: " + mover.velocity + "\na: " + acceleration + "\ns: " + mover.velocity.length;
+    tx += 0.01;
+    ty += 0.01;
 }

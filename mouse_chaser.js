@@ -26,8 +26,8 @@ var Mover = function() {
     this.position = new Point(view.center);
     this.velocity = new Point(0, 0);
 
-    this.MAXIMUM_SPEED = 3;
-    this.SIZE = 5;
+    this.MAXIMUM_SPEED = 4;
+    this.SIZE = 16;
 };
 
 Mover.prototype.update = function(acceleration) {
@@ -52,17 +52,24 @@ circle.fillColor = "orange";
 var text = new PointText(new Point(30, 30));
 text.fillColor = 'black';
 
-var ACCELERATION_BOUND = 5;
+var ACCELERATION_BOUND = 0.5;
+
+var destination = view.center;
 
 function onFrame(event) {
-    var accelerationDirection = new Point(randomInt(-1, 1), randomInt(-1, 1));
-    var acceleration = accelerationDirection * randomInt(0, ACCELERATION_BOUND);
+    var accelerationDirection = destination - mover.position;
+    var acceleration = accelerationDirection.normalize(ACCELERATION_BOUND);
     mover.update(acceleration);
 
     // TODO: Demo specific stuff.
     //Should prolly be in other encapsulations to be resued by other demos.
-    circle.position = wrap(mover.position);
+    mover.position = wrap(mover.position)
+    circle.position = mover.position;
 
     // Set the content of the text item.
-    text.content = "x: " + mover.position.x + ", y: " + mover.position.y + "\nv: " + mover.velocity + "\na: " + acceleration;
+    text.content = "x: " + circle.position.x + ", y: " + circle.position.y + "\nv: " + mover.velocity + "\na: " + acceleration;
 }
+
+function onMouseMove(event) {
+    destination = event.point;
+};

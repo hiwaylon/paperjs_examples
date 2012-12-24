@@ -26,8 +26,8 @@ var Mover = function() {
     this.position = new Point(view.center);
     this.velocity = new Point(0, 0);
 
-    this.MAXIMUM_SPEED = 5;
-    this.SIZE = 32;
+    this.MAXIMUM_SPEED = 4;
+    this.SIZE = 16;
 };
 
 Mover.prototype.update = function(acceleration) {
@@ -41,29 +41,37 @@ Mover.prototype.update = function(acceleration) {
     this.position += this.velocity;
 };
 
-var mover = new Mover();
+var perlin = new SimplexNoise();
 
-// TODO: Demo specific stuff. Encapsulate in a Renderable to be reused?
-// Mover contains a renderable?
-var circle = Path.Circle(mover.position, mover.SIZE)
-circle.fillColor = "orange";
+var NUMBER_OF_MOVERS = 79;
+var movers = [];
+var circles = [];
+for (var i = 0; i < NUMBER_OF_MOVERS; ++i) {
+    var mover = new Mover();
+    mover.position.x = randomInt(0, view.viewSize.width);
+    mover.position.y = randomInt(0, view.viewSize.height);
+    movers.push(mover);
 
-// Create a point-text item at {x: 30, y: 30}.
-var text = new PointText(new Point(30, 30));
-text.fillColor = "black";
+    var circle = Path.Circle(mover.position, mover.SIZE);
+    circle.fillColor = "orange";
+    circles.push(circle);
+}
 
 var ACCELERATION_BOUND = 0.5;
+var tx = 0, ty = 10000;
 
 function onFrame(event) {
-    var accelerationDirection = new Point(randomInt(-1, 1), randomInt(-1, 1));
-    var acceleration = accelerationDirection * randomInt(0, ACCELERATION_BOUND);
-    mover.update(acceleration);
+    for (var i = 0; i < NUMBER_OF_MOVERS; ++i) {
+        var accelerationDirection = new Point(perlin.noise(tx, 0), perlin.noise(0, ty));
+        var acceleration = accelerationDirection.normalize(ACCELERATION_BOUND);
+        movers[i].update(acceleration);
 
-    // TODO: Demo specific stuff.
-    //Should prolly be in other encapsulations to be resued by other demos.
-    mover.position = wrap(mover.position)
-    circle.position = mover.position;
+        // TODO: Demo specific stuff.
+        //Should prolly be in other encapsulations to be resued by other demos.
+        movers[i].position = wrap(movers[i].position)
+        circles[i].position = movers[i].position;
 
-    // Set the content of the text item.
-    text.content = "x: " + circle.position.x + ", y: " + circle.position.y + "\nv: " + mover.velocity + "\na: " + acceleration;
+        tx += 1;
+        ty += 1;
+    }
 }
