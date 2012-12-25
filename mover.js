@@ -1,6 +1,5 @@
-console.log('le mover')
-var Mover = function(position) {
-    this.position = position || new Point(view.center);
+var Mover = function() {
+    this.position = new Point(paper.view.center);
     this.velocity = new Point(0, 0);
     this.acceleration = new Point(0, 0);
 
@@ -13,14 +12,18 @@ Mover.prototype.applyForce = function(force) {
 };
 
 Mover.prototype.update = function() {
-    this.velocity += this.acceleration;
+    // console.log(this.acceleration.x);
+    console.log(this.velocity.x);
+    console.log(this.position.x);
+    this.velocity = this.velocity + this.acceleration;
 
     // Constrains speed.
-    if (this.velocity.length > this.MAXIMUM_SPEED) {
-        this.velocity.length = this.MAXIMUM_SPEED;
-    }
+    // if (this.velocity.length > this.MAXIMUM_SPEED) {
+    //     this.velocity.length = this.MAXIMUM_SPEED;
+    // }
 
-    this.position += this.velocity;
+    // console.log(this.position.x);
+    // this.position += this.velocity;
 
-    this.acceleration = new Point(0, 0);
+    // this.acceleration = new Point(0, 0);
 };

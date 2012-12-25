@@ -5,6 +5,14 @@ var bounceAtTop = function(position, velocity, radius) {
     }
 };
 
+var bounceAtBottom = function(position, velocity, radius, height) {
+    var heightLessRadius = height - radius;
+    if (position.y > heightLessRadius) {
+        velocity.y *= -1;
+        position.y = heightLessRadius;
+    }
+};
+
 var bounceAtLeft = function(position, velocity, radius) {
     if (position.x < radius) {
         velocity.x *= -1;
