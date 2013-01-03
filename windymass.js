@@ -1,4 +1,4 @@
-var SIZE_SCALE = 16;
+var SIZE_SCALE = 9;
 
 var Mover = function(mass, position) {
     this.position = position || new Point(view.center);
@@ -6,7 +6,7 @@ var Mover = function(mass, position) {
     this.acceleration = new Point(0, 0);
     this.mass = mass;
 
-    this.MAXIMUM_SPEED = 4;
+    this.MAXIMUM_SPEED = 3;
     this.size = mass * SIZE_SCALE;
 };
 
@@ -38,7 +38,9 @@ for (var i = 0; i < NUMBER_OF_ENTITIES; i++) {
     var mover = new Mover(randomMass, new Point(randomInt(0, view.viewSize.width), 0));
 
     var circle = Path.Circle(mover.position, mover.size);
-    circle.fillColor = "orange";
+    circle.fillColor = new RgbColor(Math.random(), Math.random(), Math.random());
+    circle.strokeColor = "black";
+    circle.strokeWidth = 2;
 
     var info = new PointText(mover.position);
     info.fillColor = "black";
@@ -62,7 +64,7 @@ var perlin = new SimplexNoise();
 var tx = 0, ty = 10000;
 
 var WIND_FORCE = new Point(0.01, 0);
-var GRAVITY_FORCE = new Point(0, 0.1);
+var GRAVITY_FORCE = new Point(0, 0.15);
 
 function onFrame(event) {
     // TODO: How to update movers differently? Delegate to eavh a call to
