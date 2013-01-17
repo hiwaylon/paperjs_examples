@@ -64,7 +64,7 @@ var perlin = new SimplexNoise();
 var tx = 0, ty = 10000;
 
 var WIND_FORCE = new Point(0.01, 0);
-var GRAVITY_FORCE = new Point(0, 0.15);
+var GRAVITY_FORCE = new Point(0, 0.1);
 
 function onFrame(event) {
     // TODO: How to update movers differently? Delegate to eavh a call to
@@ -76,6 +76,7 @@ function onFrame(event) {
         var mover = entities[i].mover;
 
         entities[i].mover.applyForce(WIND_FORCE);
+
         mover.applyForce(GRAVITY_FORCE * mover.mass);
 
         entities[i].mover.update();
